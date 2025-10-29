@@ -1,0 +1,1 @@
+# godot_drawing_closed_shape_prototape
