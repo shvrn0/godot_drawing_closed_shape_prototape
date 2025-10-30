@@ -2,8 +2,14 @@ class_name DrawingLine2D
 extends Line2D
 
 var min_close_distance_px := 80
-var min_distance_px := 10
+var min_distance_px := 5
 var min_points_for_shape := 20
+var distance_weight := 0.8 # from 0 to 1, -> 1 if possible connect most distant points, 0 -> do not consider distance in connection at all
+var line_width_px := 2
+
+
+func _ready() -> void:
+	width = line_width_px
 
 
 func add_drawing_point(point: Vector2) -> void:
@@ -17,7 +23,7 @@ func try_to_create_shape():
 	var closest_point_indexes := create_distance_matrix()
 	if closest_point_indexes.x < 0:
 		queue_free()
-		return
+		return false
 	
 	var tail_point := points[closest_point_indexes.x]
 	var head_point := points[closest_point_indexes.y]
@@ -26,8 +32,10 @@ func try_to_create_shape():
 	if distance < min_close_distance_px:
 		points = points.slice(closest_point_indexes.x, closest_point_indexes.y)
 		closed = true
+		return true
 	else:
 		queue_free()
+		return false
 
 
 func create_distance_matrix() -> Vector2i:
@@ -51,5 +59,5 @@ func create_distance_matrix() -> Vector2i:
 
 func calculate_factor_distance(a: Vector2, b: Vector2, factor: float) -> float:
 	var distance := a.distance_to(b)
-	var distance_with_factor := distance - distance*factor*factor
+	var distance_with_factor := distance - distance*factor*factor*distance_weight
 	return distance_with_factor

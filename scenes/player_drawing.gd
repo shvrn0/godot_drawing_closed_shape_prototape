@@ -1,17 +1,11 @@
 class_name PlayerDrawing
 extends Node2D
 
-@export var min_distance_px := 5
-@export var line_width_px := 2
-@export var min_close_distance_px := 80
-var current_line : DrawingLine2D
 
+var current_line : DrawingLine2D
 
 func start_line(position: Vector2) -> void:
 	current_line = DrawingLine2D.new()
-	current_line.width = line_width_px
-	current_line.min_close_distance_px = min_close_distance_px
-	current_line.min_distance_px = min_distance_px
 	add_child(current_line)
 	new_point(position)
 
